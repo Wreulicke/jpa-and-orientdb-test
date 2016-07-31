@@ -1,0 +1,8 @@
+.classpath
+.project
+target
+.settings/
+*.swp
+.setting
+
+testdb/
