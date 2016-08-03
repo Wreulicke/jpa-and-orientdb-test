@@ -23,9 +23,11 @@ public class ContainerTest {
   public static void before(){
   }
   @Test
-  public void test(){
-    System.out.println(testBean);
+  public void test() throws Exception{
+
     testBean.print();
+    TestBean rawBean=(TestBean) testBean.getClass().getDeclaredMethod("getTargetInstance").invoke(testBean);
+    System.out.println(rawBean.em);
     System.out.println(em);
   }
 }
