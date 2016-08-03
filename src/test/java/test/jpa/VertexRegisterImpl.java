@@ -20,8 +20,8 @@ public class VertexRegisterImpl implements VertexRegister{
   @Override
   public<T extends OrientVertex> void regist(OrientGraph graph, Class<T> vertexClass) {
     String clazzName=vertexClass.getSimpleName();
-    OrientVertexType type=graph.getVertexBaseType();
-    if(graph.getVertexType(clazzName)==null){
+    OrientVertexType type=graph.getVertexType(clazzName);
+    if(type==null){
       Class<?> superClazz=vertexClass.getSuperclass();
       String superClazzName=superClazz.equals(OrientVertex.class)?
           OClass.VERTEX_CLASS_NAME :
@@ -46,8 +46,8 @@ public class VertexRegisterImpl implements VertexRegister{
       
       OType oType=annotation.value();
       if(OType.ANY.equals(oType))oType=classMapping.get(fieldType);
-
-      type.createProperty(field.getName(),oType);
+      String fieldName=field.getName();
+      if(type.getProperty(fieldName)==null)type.createProperty(field.getName(),oType);
       
       System.out.println("test");
     }

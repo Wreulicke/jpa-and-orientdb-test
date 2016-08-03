@@ -9,7 +9,6 @@ import javax.persistence.Persistence;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
@@ -47,9 +46,9 @@ public class AppTest {
   @Test
   public void createDB(){
     OSchema scheme=factory.getDatabase().getMetadata().getSchema();
-    System.out.println(scheme.getClass("Object").properties());;
+    System.out.println(scheme.getClass("X").properties());;
 //    scheme.dropClass(X.class.getSimpleName());
-    scheme.createClass(X.class.getSimpleName(),scheme.getClass(OClass.VERTEX_CLASS_NAME));
+//    scheme.createClass(X.class.getSimpleName(),scheme.getClass(OClass.VERTEX_CLASS_NAME));
     
 //    System.out.println();
     OrientGraph graph=factory.getTx();
@@ -61,7 +60,7 @@ public class AppTest {
   public void registerTest(){
     VertexRegister register=new VertexRegisterImpl();
 
-    factory.getNoTx().dropVertexType("X");
+//    factory.getNoTx().dropVertexType("X");
     OrientGraph graph=factory.getTx();
     register.regist(graph,X.class);
     graph.commit();
@@ -70,11 +69,9 @@ public class AppTest {
   }
   @Test
   public void addVertexTest(){
-    System.out.println(factory.getDatabase().getMetadata().getSchema().getClass(X.class).setStrictMode(true));
+//    System.out.println(factory.getDatabase().getMetadata().getSchema().getClass(X.class).setStrictMode(true));
     
     OrientGraph graph=factory.getTx();
-    X x=new X();
-    x.test="a~~~hopping hopping";
     Vertex v=graph.addVertex("class:X");
     v.setProperty("test","aaa");
     graph.commit();
