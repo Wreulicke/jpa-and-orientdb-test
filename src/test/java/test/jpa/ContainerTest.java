@@ -27,7 +27,17 @@ public class ContainerTest {
 
     testBean.print();
     TestBean rawBean=(TestBean) testBean.getClass().getDeclaredMethod("getTargetInstance").invoke(testBean);
+    
     System.out.println(rawBean.em);
     System.out.println(em);
+    em.getTransaction().begin();
+    em.persist(new Element());
+    em.persist(new Element());
+    em.persist(new Element());
+    em.persist(new Element());
+    em.persist(new Element());
+    em.getTransaction().commit();
+    System.out.println(em.createNamedQuery("Element.findAll",Element.class).getResultList().size());
+    
   }
 }

@@ -22,7 +22,7 @@ import test.jpa.VertexRegister.OProperty;
  */
 public class AppTest {
   private static EntityManager em;
-  private static OrientGraphFactory factory=new OrientGraphFactory("plocal:./testdb");
+  private static OrientGraphFactory factory=new OrientGraphFactory("memory:./testdb");
   @BeforeClass
   public static void setup(){
     em=Persistence.createEntityManagerFactory("test").createEntityManager();
