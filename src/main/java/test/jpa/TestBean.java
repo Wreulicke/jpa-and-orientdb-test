@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 public class TestBean {
   @Inject
   Element element;
-  @Inject
   @PersistenceContext(unitName="test")
   EntityManager em;
   

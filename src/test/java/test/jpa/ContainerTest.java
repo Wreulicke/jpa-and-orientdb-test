@@ -11,8 +11,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(WeldJUnit4Runner.class)
 public class ContainerTest {
-  // TODO fix annotation
-  @Inject
   @PersistenceContext(unitName="test")
   EntityManager em;
   

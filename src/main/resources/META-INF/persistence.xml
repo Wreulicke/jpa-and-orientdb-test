@@ -17,7 +17,4 @@
 				value="database" />
 		</properties>
 	</persistence-unit>
-	<persistence-unit name="graph">
-		<provider>com.orientechnologies.orient.object.jpa.OJPAPersistenceProvider</provider>
-	</persistence-unit>
 </persistence>
