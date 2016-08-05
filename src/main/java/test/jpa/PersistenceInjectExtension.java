@@ -21,46 +21,47 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 public class PersistenceInjectExtension implements Extension {
-  Map<Class<?>, List<Field>> pool=new HashMap<>();
-  
+  Map<Class<?>, List<Field>> pool = new HashMap<>();
+
   public <Type> void test(@Observes ProcessInjectionTarget<Type> processInjectionTarget) {
     AnnotatedType<Type> type = processInjectionTarget.getAnnotatedType();
-    Class<?> clazz=type.getJavaClass();
-    if(pool.containsKey(clazz))return;
-    List<Field> fields=type.getFields().stream()
-        .filter(field -> field.isAnnotationPresent(PersistenceContext.class))
-        .map(AnnotatedField::getJavaMember)
-        .filter(field -> field.getType().isAssignableFrom(EntityManager.class))
-        .collect(Collectors.toList());
-    if(fields.isEmpty())return;
-    pool.put(clazz,fields);
+    Class<?> clazz = type.getJavaClass();
+    if (pool.containsKey(clazz))
+      return;
+    List<Field> fields = type.getFields().stream().filter(field -> field.isAnnotationPresent(PersistenceContext.class)).map(
+        AnnotatedField::getJavaMember).filter(field -> field.getType().isAssignableFrom(EntityManager.class)).collect(Collectors.toList());
+    if (fields.isEmpty())
+      return;
+    pool.put(clazz, fields);
     final InjectionTarget<Type> injectionTarget = processInjectionTarget.getInjectionTarget();
-    processInjectionTarget.setInjectionTarget(new TrasferedInjector<>(injectionTarget, (instance,ctx) ->{
-      List<Field> list=pool.get(clazz);
-      list.forEach(field->{
+    processInjectionTarget.setInjectionTarget(new TrasferedInjector<>(injectionTarget, (instance, ctx) -> {
+      List<Field> list = pool.get(clazz);
+      list.forEach(field -> {
         field.setAccessible(true);
         try {
-          field.set(instance,Persistence.createEntityManagerFactory("test").createEntityManager());
+          field.set(instance, Persistence.createEntityManagerFactory("test").createEntityManager());
         } catch (Exception e) {
           throw new InjectionException(e);
         }
       });
     }));
   }
-  
-  
+
+
   @FunctionalInterface
-  interface Injector<T>{
+  interface Injector<T> {
     public void inject(T instance, CreationalContext<T> ctx);
   }
-  
-  static class TrasferedInjector<T> implements InjectionTarget<T>{
+
+  static class TrasferedInjector<T> implements InjectionTarget<T> {
     InjectionTarget<T> it;
     Injector<T> injector;
+
     public TrasferedInjector(InjectionTarget<T> transferInjectionTarget, Injector<T> injector) {
-      it=transferInjectionTarget;
-      this.injector=injector;
+      it = transferInjectionTarget;
+      this.injector = injector;
     }
+
     @Override
     public T produce(CreationalContext<T> ctx) {
       return it.produce(ctx);
@@ -91,6 +92,6 @@ public class PersistenceInjectExtension implements Extension {
     public void preDestroy(T instance) {
       it.preDestroy(instance);
     }
-    
+
   }
 }
