@@ -1,1 +1,2 @@
 test.jpa.PersistenceInjectExtension
+test.jpa.ClassModifierExtension
